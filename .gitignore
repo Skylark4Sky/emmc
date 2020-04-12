@@ -1,4 +1,4 @@
-﻿##ignore this file##
+##ignore this file##
 .classpath
 .project
 .settings
@@ -47,4 +47,5 @@ Thumbs.db
 *.sct
 *.map
 *.lnp
-*.bin
+code/MDK/Objects/GSL_EEM_code.bin
+code/MDK/GSL_EEM_code.uvguix.Administrator

@@ -1,4 +1,4 @@
-##ignore this file##
+﻿##ignore this file##
 .classpath
 .project
 .settings
@@ -21,7 +21,6 @@
 *.7z
 *.dmg
 *.gz
-*.rcf
 *.iso
 *.jar
 *.rar
@@ -39,3 +38,13 @@
 Icon?
 ehthumbs.db
 Thumbs.db
+*.crf
+*.d
+*.htm
+*.lst
+*.axf
+*.dep
+*.sct
+*.map
+*.lnp
+*.bin

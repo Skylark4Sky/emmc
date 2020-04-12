@@ -43,6 +43,7 @@ static void gisunlink_system_init_coms(gisunlink *global) {
 
 	for(comID = 0; comID < MAX_COM_QUANTITY; comID++) {
 		global->comList[comID].id = comID;
+		global->comList[comID].breakdown = NO_BREAKDOWN;
 		global->breakdown_chk[comID] = NO_BREAKDOWN;
 		gisunlink_com_reset(global,comID,1);
 	}

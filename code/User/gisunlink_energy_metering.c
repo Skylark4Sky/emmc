@@ -416,7 +416,7 @@ static uint8_t gisunlink_read_energy_data(charge_com *com,gisunlink *global) {
 		uint16_t icReset = global->icReset[com->id];
 		icReset++;
 		global->icReset[com->id] = icReset;
-		comEnergy->ergy_offsetP = com->used;
+		comEnergy->ergy_offsetP = com->used*16/5;
 		comEnergy->ergy_offsetN = 0;
 
 		if((com->id&0x01) == 1)//当前为第二通道
@@ -429,7 +429,7 @@ static uint8_t gisunlink_read_energy_data(charge_com *com,gisunlink *global) {
 			comEnergy = &EnergyData[com->id + 1];
 		}
 
-		comEnergy->ergy_offsetP = com->used;
+		comEnergy->ergy_offsetP = com->used*16/5;
 		comEnergy->ergy_offsetN = 0;
 		comEnergy = &EnergyData[com->id];//切换到当前地址
 		

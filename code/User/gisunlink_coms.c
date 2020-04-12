@@ -240,7 +240,7 @@ void gisunlink_chargring_chk(gisunlink *global,void(*NetworkPost)(gisunlink *glo
 							gisunlink_com_reset(global,comID,0);
 							gisunlink_lcd_set_port_status(comID,PORT_LEISURE);//空闲												
 						}			
-						gisunlink_com_stop_charge(global,comID);							
+						gisunlink_com_stop_charge(global,comID);				
 					}						
 			}
 		}

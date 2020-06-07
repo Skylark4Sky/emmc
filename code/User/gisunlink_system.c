@@ -285,15 +285,30 @@ void gisunlink_system_time_tick(void) {
 	if(global.system.tick%1000 == 0) {		
 		
 		if(global.system.network_connect == FALSE) {
-			if((global.system.tick - global.system.recvTime) >= 600000) {//10分钟			
-				global.system.recvTime = global.system.tick;
-				GSM_HIGH();
-				WIFI_HIGH();
-				if(global.conf.mode == SYSTEM_GSM_MODE) {
-					gisunlink_select_network_module(GISUNLINK_GSM_MODULE);		
-				} else {
-					gisunlink_select_network_module(GISUNLINK_WIFI_MODULE);
+			uint32_t offLineTime = (global.system.tick - global.system.recvTime);			
+			
+			if(offLineTime >= 900000) {//15分钟	
+			#if 0	
+				//如果离线15分钟 重启板子
+				if(global.system.route_work == IS_ENABLE) { 
+					gisunlink_system_powerdown_backup();
 				}
+				gisunlink_system_soft_reset();	
+			#else 
+				//如果离线15分钟 设备没有在充电 则 重启整个板子 如果在充电则重启2G模组
+				global.system.recvTime = global.system.tick;
+				if(global.system.route_work == IS_ENABLE) { 
+					GSM_HIGH();
+					WIFI_HIGH();							
+					if(global.conf.mode == SYSTEM_GSM_MODE) {
+						gisunlink_select_network_module(GISUNLINK_GSM_MODULE);		
+					} else {
+						gisunlink_select_network_module(GISUNLINK_WIFI_MODULE);
+					}				
+				} else {
+					gisunlink_system_soft_reset();
+				}
+			#endif
 			}			
 		}
 

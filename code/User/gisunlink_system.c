@@ -90,7 +90,7 @@ gisunlink *gisunlink_system_init(void) {
 	global.system.network_connect = FALSE;
 	global.system.no_load_time = NO_LOAD_TIME;
 	global.system.network_state = GISUNLINK_NETMANAGER_IDLE; 
-
+	
 	gisunlink_system_read_stmID((uint8_t *)global.system.deviceSN);
 	gisunlink_system_init_coms(&global);
 
@@ -116,6 +116,8 @@ gisunlink *gisunlink_system_init(void) {
 	} else {
 		gisunlink_select_network_module(GISUNLINK_WIFI_MODULE);
 	}
+	
+	global.system.recvTime = gisunlink_system_get_time_tick();
 	return &global;
 }
 

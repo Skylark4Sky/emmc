@@ -393,12 +393,12 @@ static uint8_t gisunlink_read_energy_data(charge_com *com,gisunlink *global) {
 
 	if(com == NULL || com->id > 9) {
 		return 1;
-	} else {
-		comEnergy = &EnergyData[com->id];
-	}
+	} 
 
-	if((com->id&0x01) == 1)//选择通道B
-	{
+	comEnergy = &EnergyData[com->id];
+
+	//选择通道B
+	if((com->id&0x01) == 1) {
 		c_reg = ADIBRMS;
 		e_reg = ADEnergyD;
 	}	

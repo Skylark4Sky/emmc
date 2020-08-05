@@ -288,13 +288,16 @@ void gisunlink_system_time_tick(void) {
 			uint32_t offLineTime = (global.system.tick - global.system.recvTime);			
 			
 			if(offLineTime >= 900000) {//15分钟	
-			#if 0	
+				//重启模组
+				gisunlink_network_module_write(GISUNLINK_RESET_NET_MODULE,NULL,0);
+#if 0
+#if 0	
 				//如果离线15分钟 重启板子
 				if(global.system.route_work == IS_ENABLE) { 
 					gisunlink_system_powerdown_backup();
 				}
 				gisunlink_system_soft_reset();	
-			#else 
+#else 
 				//如果离线15分钟 设备没有在充电 则 重启整个板子 如果在充电则重启2G模组
 				global.system.recvTime = global.system.tick;
 				if(global.system.route_work == IS_ENABLE) { 
@@ -308,7 +311,8 @@ void gisunlink_system_time_tick(void) {
 				} else {
 					gisunlink_system_soft_reset();
 				}
-			#endif
+#endif
+#endif
 			}			
 		}
 

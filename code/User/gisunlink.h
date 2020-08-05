@@ -179,14 +179,15 @@ typedef enum {
 	GISUNLINK_NETWORK_RESET = 0x06,			//重设置网络链接 (仅仅针对wifi模块)
 	GISUNLINK_NETWORK_RSSI = 0x07,			//网络信号强度
 
-	GISUNLINK_DEV_FW_INFO = 0x08,				//设置固件升级版本
+	GISUNLINK_DEV_FW_INFO = 0x08,			//设置固件升级版本
 	GISUNLINK_DEV_FW_TRANS = 0x09,			//固件数据传输
 	GISUNLINK_DEV_FW_READY = 0x0A,			//固件确认完成
-	GISUNLINK_DEV_SN = 0x0B,						//固件确认完成	
+	GISUNLINK_DEV_SN = 0x0B,				//固件确认完成	
 
 	GISUNLINK_TASK_CONTROL = 0x0C,			//网络数据透传
-	GISUNLINK_HW_SN = 0x0D,							//硬件串号
-	GISUNLINK_FIRMWARE_VERSION = 0x0E,	//硬件固件号	
+	GISUNLINK_HW_SN = 0x0D,					//硬件串号
+	GISUNLINK_FIRMWARE_VERSION = 0x0E,		//硬件固件号	
+	GISUNLINK_RESET_NET_MODULE = 0x0F,		//重启网络模组	
 } GISUNLINK_MODULE_CMD;
 
 typedef enum {

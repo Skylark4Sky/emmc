@@ -292,6 +292,7 @@ void gisunlink_system_time_tick(void) {
 			if(offLineTime >= 900000) {//15分钟	
 				//重启模组
 				gisunlink_network_module_write(GISUNLINK_RESET_NET_MODULE,NULL,0);
+				global.system.recvTime = global.system.tick;
 #if 0
 #if 0	
 				//如果离线15分钟 重启板子

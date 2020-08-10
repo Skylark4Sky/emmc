@@ -286,13 +286,13 @@ void gisunlink_system_time_tick(void) {
 	
 	if(global.system.tick%1000 == 0) {		
 		
-		if(global.system.network_connect == FALSE) {
-			uint32_t offLineTime = (global.system.tick - global.system.recvTime);			
-			
-			if(offLineTime >= 900000) {//15分钟	
+		if(global.system.network_connect == FALSE) {		
+			//
+			if((global.system.tick - global.system.recvTime) >= 900000) {//15分钟	
+				global.system.recvTime = global.system.tick;
 				//重启模组
 				gisunlink_network_module_write(GISUNLINK_RESET_NET_MODULE,NULL,0);
-				global.system.recvTime = global.system.tick;
+
 #if 0
 #if 0	
 				//如果离线15分钟 重启板子

@@ -17,7 +17,7 @@
 #include "md5.h"
 #include "gisunlink_type.h"
 
-#define FIRMWARE_VERSION "202008062022"
+#define FIRMWARE_VERSION "202008161836"
 
 #ifdef __cplusplus
 extern "C"

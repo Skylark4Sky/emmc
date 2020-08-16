@@ -270,7 +270,7 @@ void gisunlink_task_control(gisunlink *global, gisunlink_recv_frame *frame) {
 							gisunlink_lcd_set_port_status(stop_charge.id,PORT_LEISURE);
 							if(global->comList[stop_charge.id].enable == IS_ENABLE) {		
 								gisunlink_network_single_com_post(global,stop_charge.id,GISUNLINK_STOP_CHARGE);	
-								gisunlink_com_reset(global,stop_charge.id,1);
+								gisunlink_com_reset(global,stop_charge.id,stop_charge.force_stop);
 								respond_value = gisunlink_com_stop_charge(global,stop_charge.id);
 							}									
 						}								

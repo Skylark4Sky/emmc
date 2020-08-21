@@ -288,7 +288,7 @@ void gisunlink_system_time_tick(void) {
 		
 		if(global.system.network_connect == FALSE) {		
 			//
-			if((global.system.tick - global.system.recvTime) >= 900000) {//15分钟	
+			if((global.system.tick - global.system.recvTime) >= 300000) {//5分钟	
 				global.system.recvTime = global.system.tick;
 				//重启模组
 				gisunlink_network_module_write(GISUNLINK_RESET_NET_MODULE,NULL,0);

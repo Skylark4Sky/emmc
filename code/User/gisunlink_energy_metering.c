@@ -114,18 +114,18 @@ void HC595OutByte(uint16_t data) {
 			CSER_LOW();
 		}
 
-		DelayUs(10);
+		DelayUs(1);
 		CSCK_LOW();	
-		DelayUs(120);//75//最小值为40
+		DelayUs(145);//75//最小值为40
 		CSCK_HIGH();
-		DelayUs(120);
+		DelayUs(145);
 
 	}
 
 	CRCK_LOW();
-	DelayUs(5);
+	DelayUs(10);
 	CRCK_HIGH();
-	DelayUs(5);
+	DelayUs(1);
 	//__set_PRIMASK(0);		
 }
 

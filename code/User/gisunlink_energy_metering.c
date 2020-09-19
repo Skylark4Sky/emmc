@@ -508,11 +508,11 @@ void gisunlink_read_realtime_meter_data(gisunlink *global) {
 	static uint8_t read_comID = 0;
 	LED_Toggle();			
 	
-	if(global->comList[read_comID].enable && global->comList[read_comID].breakdown == NO_BREAKDOWN) {	
+//	if(global->comList[read_comID].enable && global->comList[read_comID].breakdown == NO_BREAKDOWN) {	
 		gisunlink_read_energy_data(&global->comList[read_comID],global);
-	} else {
-		gisunlink_close_check_channel(read_comID);	
-	}
+//	} else {
+//		gisunlink_close_check_channel(read_comID);	
+//	}
 	
 	read_comID++; 
 	if(read_comID >= MAX_COM_QUANTITY) {

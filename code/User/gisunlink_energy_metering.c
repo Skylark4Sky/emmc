@@ -129,8 +129,7 @@ void HC595OutByte(uint16_t data) {
 	//__set_PRIMASK(0);		
 }
 
-void gisunlink_energy_metering_Init(void)
-{
+void gisunlink_energy_metering_Init(void) {
 	uint8_t i;
 
 	gisunlink_check_usart_init();	
@@ -165,15 +164,13 @@ ErrorStatus fnRN8209_Write(u8 wReg,u8 *pBuf,u8 ucLen) {
 
 	if( (ucLen == 0) || (ucLen > 4) ) return(ERROR);
 
-
 	ComPack.pTx=&ComPack.TxBuf[0];	
 
 	//写数据前，先发送命令字节，命令字节的最高位bit[7]=0:读操作；1：写操作；bit[6:0]为待操作寄存的地址		
 	temp =wReg|0x80;//待操作寄存器地址最高位或1，使命令字节为写命令
 	*(ComPack.pTx++)=temp;
 	chksum = temp;		
-	for(i = ucLen; i > 0;i-- )
-	{		
+	for(i = ucLen; i > 0;i--) {		
 		*(ComPack.pTx++)=pBuf[i-1];	//向RN8209发送数据		
 		chksum +=pBuf[i-1];
 	}
@@ -226,8 +223,8 @@ ErrorStatus fnRN8209_Read(u8 wReg,u8 *pBuf,u8 ucLen) {
 
 	while(i--) {//等待接受数据完成
 		DelayMs(1);
-		if(ComPack.RxLen >= (ucLen+1) )
-			break;		
+		if(ComPack.RxLen >= (ucLen+1))
+			break;
 	}
 
 #if 0
@@ -239,16 +236,14 @@ ErrorStatus fnRN8209_Read(u8 wReg,u8 *pBuf,u8 ucLen) {
 	}
 #endif
 
-	for(i = ucLen; i > 0;i--)
-	{
+	for(i = ucLen; i > 0;i--) {
 		pBuf[i-1] = ComPack.RxBuf[j++]; //将接收到的数据保存到数组pBuf[]
 		chksum += pBuf[i-1];//计算接收数据的校验和
 	}
 	chksum = ~chksum;
 	temp=ComPack.RxBuf[j++];
 
-	if(temp!=chksum)  
-	{//若校验和错误，清接收数据
+	if(temp!=chksum) {//若校验和错误，清接收数据
 		err = ERROR;
 	}
 	return(err);
@@ -303,7 +298,6 @@ void EMU_Calibration(void) {
 
 	writeTempBuf[0]=WriteDis;
 	fnRN8209_Write(SpecialReg ,writeTempBuf,1);//关闭写使能
-
 }
 
 uint8_t gisunlink_open_check_channel(uint8_t channel) {

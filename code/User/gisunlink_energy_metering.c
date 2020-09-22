@@ -6,7 +6,7 @@
 #include "gisunlink_usart.h"
 #include "gisunlink_gpio.h"
 #include "gisunlink_delay.h"
-//----------------------start RN8209  µØÖ·¶¨Òå---------------------------------------------------//
+//----------------------start RN8209  åœ°å€å®šä¹‰---------------------------------------------------//
 #define					ADSYSCON 				0x00 
 #define        	ADEMUCON 				0x01
 #define        	ADHFConst     	0x02 
@@ -57,7 +57,7 @@
 #define         SpecialReg   		0xea
 #define					WriteEn					0xe5
 #define					WriteDis				0xdc
-//----------------------end RN8209  µØÖ·¶¨Òå-----------------------------------------------//
+//----------------------end RN8209  åœ°å€å®šä¹‰-----------------------------------------------//
 
 #define SENSOR_READ_COUNT 	250
 
@@ -87,8 +87,8 @@ typedef struct {
 	volatile uint8_t curtfailed_time;	
 	volatile uint8_t define_curtfailed_time;	
 	volatile uint8_t ergy_offset_enable;
-	volatile uint32_t ergy_offsetP;//Õı²¹³¥
-	volatile uint32_t ergy_offsetN;//¸º²¹³¥
+	volatile uint32_t ergy_offsetP;//æ­£è¡¥å¿
+	volatile uint32_t ergy_offsetN;//è´Ÿè¡¥å¿
 } EnergyDataType;
 
 EnergyDataType EnergyData[MAX_COM_QUANTITY];
@@ -97,11 +97,11 @@ sComPack_TypeDef ComPack;
 volatile const uint16_t RevRelaySelectionBuf[10]={0xfffd, 0xfffb, 0xfff7, 0xffef, 0xffdf, 0xffbf, 0xff7f, 0xfdff, 0xfbff, 0xf7ff};
 // 1        2       3       4       5       6       7       8      9      10       
 volatile const uint16_t RelaySelectionBuf[12]=   {0x03,   0x05,   0x09,    0x11,   0x21,   0x41,   0x81,   0x201,  0x401,  0x801, 0xfff,0x0 };
-// 1        2      3        4       5       6       7       8      9      10   È«¿ª  È«¹Ø  //bit13-bit16¸ß4Î»¶ÔÓ¦´®¿ÚºÅ 0-3,1-4,2-5,3-2,4-1
+// 1        2      3        4       5       6       7       8      9      10   å…¨å¼€  å…¨å…³  //bit13-bit16é«˜4ä½å¯¹åº”ä¸²å£å· 0-3,1-4,2-5,3-2,4-1
 
 volatile const uint16_t ComSelectionBuf[5]={0x4000,0x3000,0x0,0x1000,0x2000};
 
-volatile uint16_t ComRelayStatus = 0;//Í¨µÀµÄ×´Ì¬
+volatile uint16_t ComRelayStatus = 0;//é€šé“çš„çŠ¶æ€
 
 void HC595OutByte(uint16_t data) {
 	uint16_t i;
@@ -116,7 +116,7 @@ void HC595OutByte(uint16_t data) {
 
 		DelayUs(1);
 		CSCK_LOW();	
-		DelayUs(145);//75//×îĞ¡ÖµÎª40
+		DelayUs(145);//75//æœ€å°å€¼ä¸º40
 		CSCK_HIGH();
 		DelayUs(145);
 
@@ -135,9 +135,9 @@ void gisunlink_energy_metering_Init(void)
 
 	gisunlink_check_usart_init();	
 	
-	ComRelayStatus = ComSelectionBuf[0]|RelaySelectionBuf[11];//¹Ø±ÕËùÓĞ¼ÌµçÆ÷Êä³ö,Ñ¡Í¨´®¿Ú0
+	ComRelayStatus = ComSelectionBuf[0]|RelaySelectionBuf[11];//å…³é—­æ‰€æœ‰ç»§ç”µå™¨è¾“å‡º,é€‰é€šä¸²å£0
 	HC595OutByte(ComRelayStatus);
-	COE_LOW();//Ê¹ÄÜ595ÓĞĞ§
+	COE_LOW();//ä½¿èƒ½595æœ‰æ•ˆ
 	DelayMs(20);
 
 	for(i=0;i<5;i++)//Calibration all channel
@@ -152,11 +152,11 @@ void gisunlink_energy_metering_Init(void)
 /*****************************************************************************
  ** Function name:fnRN8209_Write(u8 wReg,u8 *pBuf,u8 ucLen)
  **
- ** Description:Ğ´RN8209¼Ä´æÆ÷
+ ** Description:å†™RN8209å¯„å­˜å™¨
  **
- ** Parameters:wReg ¼Ä´æÆ÷µØÖ·£¬*pBuf´ıĞ´ÈëÖµµÄ´æ·ÅµØÖ·£¬ucLen£º´ıĞ´ÈëÖµµÄ³¤¶È
+ ** Parameters:wReg å¯„å­˜å™¨åœ°å€ï¼Œ*pBufå¾…å†™å…¥å€¼çš„å­˜æ”¾åœ°å€ï¼ŒucLenï¼šå¾…å†™å…¥å€¼çš„é•¿åº¦
  **
- ** Returned value:	²Ù×÷±êÊ¶-³É¹¦»òÊ§°Ü
+ ** Returned value:	æ“ä½œæ ‡è¯†-æˆåŠŸæˆ–å¤±è´¥
  **
  ******************************************************************************/
 
@@ -168,13 +168,13 @@ ErrorStatus fnRN8209_Write(u8 wReg,u8 *pBuf,u8 ucLen) {
 
 	ComPack.pTx=&ComPack.TxBuf[0];	
 
-	//Ğ´Êı¾İÇ°£¬ÏÈ·¢ËÍÃüÁî×Ö½Ú£¬ÃüÁî×Ö½ÚµÄ×î¸ßÎ»bit[7]=0:¶Á²Ù×÷£»1£ºĞ´²Ù×÷£»bit[6:0]Îª´ı²Ù×÷¼Ä´æµÄµØÖ·		
-	temp =wReg|0x80;//´ı²Ù×÷¼Ä´æÆ÷µØÖ·×î¸ßÎ»»ò1£¬Ê¹ÃüÁî×Ö½ÚÎªĞ´ÃüÁî
+	//å†™æ•°æ®å‰ï¼Œå…ˆå‘é€å‘½ä»¤å­—èŠ‚ï¼Œå‘½ä»¤å­—èŠ‚çš„æœ€é«˜ä½bit[7]=0:è¯»æ“ä½œï¼›1ï¼šå†™æ“ä½œï¼›bit[6:0]ä¸ºå¾…æ“ä½œå¯„å­˜çš„åœ°å€		
+	temp =wReg|0x80;//å¾…æ“ä½œå¯„å­˜å™¨åœ°å€æœ€é«˜ä½æˆ–1ï¼Œä½¿å‘½ä»¤å­—èŠ‚ä¸ºå†™å‘½ä»¤
 	*(ComPack.pTx++)=temp;
 	chksum = temp;		
 	for(i = ucLen; i > 0;i-- )
 	{		
-		*(ComPack.pTx++)=pBuf[i-1];	//ÏòRN8209·¢ËÍÊı¾İ		
+		*(ComPack.pTx++)=pBuf[i-1];	//å‘RN8209å‘é€æ•°æ®		
 		chksum +=pBuf[i-1];
 	}
 	chksum = ~chksum;
@@ -182,13 +182,13 @@ ErrorStatus fnRN8209_Write(u8 wReg,u8 *pBuf,u8 ucLen) {
 	ComPack.TxLen = ucLen+2;
 	ComPack.pTx=&ComPack.TxBuf[0];
 
-	for(i=0;i<ComPack.TxLen;i++)//´®¿Ú·¢ËÍ
+	for(i=0;i<ComPack.TxLen;i++)//ä¸²å£å‘é€
 	{
 		USART_SendData(USART3,*(ComPack.pTx++));
 		while(USART_GetFlagStatus(USART3,USART_FLAG_TC)==RESET); 
 	}
 
-	//RN8209Ğ´Ê¹ÄÜ»òĞ´±£»¤¡¢¶ÁĞ´ÈëWData¼Ä´æÆ÷¼ì²é£¨ÊÇ·ñÕıÈ·Ğ´Èë£©-----------------------	
+	//RN8209å†™ä½¿èƒ½æˆ–å†™ä¿æŠ¤ã€è¯»å†™å…¥WDataå¯„å­˜å™¨æ£€æŸ¥ï¼ˆæ˜¯å¦æ­£ç¡®å†™å…¥ï¼‰-----------------------	
 	ComPack.pTx=&ComPack.TxBuf[0];	
 
 
@@ -197,11 +197,11 @@ ErrorStatus fnRN8209_Write(u8 wReg,u8 *pBuf,u8 ucLen) {
 /*****************************************************************************  
  ** Function name:fnRN8209_Read(u8 wReg,u8 *pBuf,u8 ucLen)                      
  **                                                                              
- ** Description:¶ÁRN8209¼Ä´æÆ÷                                                   
+ ** Description:è¯»RN8209å¯„å­˜å™¨                                                   
  **                                                                              
- ** Parameters:wReg ¼Ä´æÆ÷µØÖ·£¬*pBuf¶Á³öÖµµÄ´æ·ÅµØÖ·£¬ucLen£º´ı¶ÁÖµµÄ³¤¶È   
+ ** Parameters:wReg å¯„å­˜å™¨åœ°å€ï¼Œ*pBufè¯»å‡ºå€¼çš„å­˜æ”¾åœ°å€ï¼ŒucLenï¼šå¾…è¯»å€¼çš„é•¿åº¦   
  **                                                                              
- ** Returned value:	²Ù×÷±êÊ¶-³É¹¦»òÊ§°Ü                                         
+ ** Returned value:	æ“ä½œæ ‡è¯†-æˆåŠŸæˆ–å¤±è´¥                                         
  **                                                                              
  ******************************************************************************/ 
 
@@ -219,12 +219,12 @@ ErrorStatus fnRN8209_Read(u8 wReg,u8 *pBuf,u8 ucLen) {
 	ComPack.TxLen = 1;	
 	ComPack.RxLen=0; 
 
-	USART_SendData(USART3,wReg);//·¢ËÍÃüÁî×Ö
+	USART_SendData(USART3,wReg);//å‘é€å‘½ä»¤å­—
 	while(USART_GetFlagStatus(USART3,USART_FLAG_TC)==RESET); //wite
 
 	i = SENSOR_READ_COUNT;
 
-	while(i--) {//µÈ´ı½ÓÊÜÊı¾İÍê³É
+	while(i--) {//ç­‰å¾…æ¥å—æ•°æ®å®Œæˆ
 		DelayMs(1);
 		if(ComPack.RxLen >= (ucLen+1) )
 			break;		
@@ -241,14 +241,14 @@ ErrorStatus fnRN8209_Read(u8 wReg,u8 *pBuf,u8 ucLen) {
 
 	for(i = ucLen; i > 0;i--)
 	{
-		pBuf[i-1] = ComPack.RxBuf[j++]; //½«½ÓÊÕµ½µÄÊı¾İ±£´æµ½Êı×épBuf[]
-		chksum += pBuf[i-1];//¼ÆËã½ÓÊÕÊı¾İµÄĞ£ÑéºÍ
+		pBuf[i-1] = ComPack.RxBuf[j++]; //å°†æ¥æ”¶åˆ°çš„æ•°æ®ä¿å­˜åˆ°æ•°ç»„pBuf[]
+		chksum += pBuf[i-1];//è®¡ç®—æ¥æ”¶æ•°æ®çš„æ ¡éªŒå’Œ
 	}
 	chksum = ~chksum;
 	temp=ComPack.RxBuf[j++];
 
 	if(temp!=chksum)  
-	{//ÈôĞ£ÑéºÍ´íÎó£¬Çå½ÓÊÕÊı¾İ
+	{//è‹¥æ ¡éªŒå’Œé”™è¯¯ï¼Œæ¸…æ¥æ”¶æ•°æ®
 		err = ERROR;
 	}
 	return(err);
@@ -261,7 +261,7 @@ void EMU_Calibration(void) {
 	//uint8_t readTempBuf[4];
 
 	writeTempBuf[0]=WriteEn;
-	fnRN8209_Write(SpecialReg ,writeTempBuf,1);//¿ªÆôĞ´Ê¹ÄÜ
+	fnRN8209_Write(SpecialReg ,writeTempBuf,1);//å¼€å¯å†™ä½¿èƒ½
 
 	DelayMs(10);
 	writeTempBuf[0]=0xfa;
@@ -269,40 +269,40 @@ void EMU_Calibration(void) {
 	
 	DelayMs(10);
 	writeTempBuf[0]=WriteEn;
-	fnRN8209_Write(SpecialReg ,writeTempBuf,1);//¿ªÆôĞ´Ê¹ÄÜ	
+	fnRN8209_Write(SpecialReg ,writeTempBuf,1);//å¼€å¯å†™ä½¿èƒ½	
 	
 	writeTempBuf[0]=0x51;
-	writeTempBuf[1]=0x16;//SYSCON µçÁ÷Í¨µÀB¿ªÆô£¬µçÁ÷A,B,ÔöÒæÎª2±¶ ;µçÑ¹ÔöÒæÎª1
+	writeTempBuf[1]=0x16;//SYSCON ç”µæµé€šé“Bå¼€å¯ï¼Œç”µæµA,B,å¢ç›Šä¸º2å€ ;ç”µå‹å¢ç›Šä¸º1
 	dataLen=2;
-	fnRN8209_Write(ADSYSCON,writeTempBuf,dataLen);//Ğ´
+	fnRN8209_Write(ADSYSCON,writeTempBuf,dataLen);//å†™
 
 	writeTempBuf[0]=0x03;
 	writeTempBuf[1]=0x28;//
 	dataLen=2;
-	fnRN8209_Write(ADEMUCON ,writeTempBuf,dataLen);//Ğ´
+	fnRN8209_Write(ADEMUCON ,writeTempBuf,dataLen);//å†™
 
-	writeTempBuf[0]=0xf0;//D0Ë«Í¨µÀ²âÁ¿
-	writeTempBuf[1]=0x00;//¸üĞÂËÙ¶È13.982hz
+	writeTempBuf[0]=0xf0;//D0åŒé€šé“æµ‹é‡
+	writeTempBuf[1]=0x00;//æ›´æ–°é€Ÿåº¦13.982hz
 	dataLen=2;
-	fnRN8209_Write(ADEMUCON2,writeTempBuf,dataLen);//Ğ´
+	fnRN8209_Write(ADEMUCON2,writeTempBuf,dataLen);//å†™
 
 	writeTempBuf[0]=0x91;
 	writeTempBuf[1]=0x02;//
 	dataLen=2;
-	fnRN8209_Write(ADHFConst ,writeTempBuf,dataLen);//Ğ´	
+	fnRN8209_Write(ADHFConst ,writeTempBuf,dataLen);//å†™	
 
 	writeTempBuf[0]=0xff;
-	writeTempBuf[1]=0xfe;//AµçÁ÷²¹³¥
+	writeTempBuf[1]=0xfe;//Aç”µæµè¡¥å¿
 	dataLen=2;
-	fnRN8209_Write(ADIARMSOS,writeTempBuf,dataLen);//Ğ´	
+	fnRN8209_Write(ADIARMSOS,writeTempBuf,dataLen);//å†™	
 
 	writeTempBuf[0]=0xff;
-	writeTempBuf[1]=0xfe;//BµçÁ÷²¹³¥
+	writeTempBuf[1]=0xfe;//Bç”µæµè¡¥å¿
 	dataLen=2;
-	fnRN8209_Write(ADIBRMSOS,writeTempBuf,dataLen);//Ğ´	
+	fnRN8209_Write(ADIBRMSOS,writeTempBuf,dataLen);//å†™	
 
 	writeTempBuf[0]=WriteDis;
-	fnRN8209_Write(SpecialReg ,writeTempBuf,1);//¹Ø±ÕĞ´Ê¹ÄÜ
+	fnRN8209_Write(SpecialReg ,writeTempBuf,1);//å…³é—­å†™ä½¿èƒ½
 
 }
 
@@ -333,8 +333,7 @@ uint8_t gisunlink_open_check_channel(uint8_t channel) {
 
 void gisunlink_close_check_channel(uint8_t channel) {
 	ComRelayStatus &= RevRelaySelectionBuf[channel];
-	HC595OutByte(ComRelayStatus);	
-	//gisunlink_read_energy_data();
+	HC595OutByte(ComRelayStatus);
 	DelayMs(2);		
 }
 
@@ -384,7 +383,7 @@ union {
 	uint8_t readTempBuf[4];
 } unread;
 
-//»ñÈ¡Í¨µÀÊı¾İ
+//è·å–é€šé“æ•°æ®
 static uint8_t gisunlink_read_energy_data(charge_com *com,gisunlink *global) {
 	
 	uint8_t c_reg = ADIARMS;
@@ -397,14 +396,14 @@ static uint8_t gisunlink_read_energy_data(charge_com *com,gisunlink *global) {
 
 	comEnergy = &EnergyData[com->id];
 
-	//Ñ¡ÔñÍ¨µÀB
+	//é€‰æ‹©é€šé“B
 	if((com->id&0x01) == 1) {
 		c_reg = ADIBRMS;
 		e_reg = ADEnergyD;
 	}	
 
-	ComRelayStatus &=0x0fff;//ÆÁ±ÎcomÎ»
-	ComRelayStatus |= ComSelectionBuf[com->id/2];//Ñ¡ÔñcomÎ»
+	ComRelayStatus &=0x0fff;//å±è”½comä½
+	ComRelayStatus |= ComSelectionBuf[com->id/2];//é€‰æ‹©comä½
 	HC595OutByte(ComRelayStatus);	
 
 	DelayMs(1);	
@@ -419,100 +418,100 @@ static uint8_t gisunlink_read_energy_data(charge_com *com,gisunlink *global) {
 		comEnergy->ergy_offsetP = com->used*16/5;
 		comEnergy->ergy_offsetN = 0;
 
-		if((com->id&0x01) == 1)//µ±Ç°ÎªµÚ¶şÍ¨µÀ
-		{
+		if((com->id&0x01) == 1) { //å½“å‰ä¸ºç¬¬äºŒé€šé“
 			comEnergy = &EnergyData[com->id - 1];
-			
-		}
-		else//µ±Ç°ÎªµÚÒ»Í¨µÀ
-		{
+		} else { //å½“å‰ä¸ºç¬¬ä¸€é€šé“
 			comEnergy = &EnergyData[com->id + 1];
 		}
 
 		comEnergy->ergy_offsetP = com->used*16/5;
 		comEnergy->ergy_offsetN = 0;
-		comEnergy = &EnergyData[com->id];//ÇĞ»»µ½µ±Ç°µØÖ·
+		comEnergy = &EnergyData[com->id];//åˆ‡æ¢åˆ°å½“å‰åœ°å€
 		
 		DelayMs(1);
 		return SUCCESS;
 	}
 
-	if(comEnergy->unid.id == 0x00820900) {
-
-		if(gisunlink_read_channel_ergy(e_reg,comEnergy,3) == SUCCESS) {//µçÄÜ		
-			if(comEnergy->ergy_offset_enable == 1) {
-				comEnergy->ergy_offset_enable = 0;
-				comEnergy->ergy_offsetP = 0;
-				comEnergy->ergy_offsetN = comEnergy->unergy.ergy;
-			}			
-			com->used = (abs((int)(comEnergy->unergy.ergy - comEnergy->ergy_offsetN)) * 5 / 16) + comEnergy->ergy_offsetP;
-		} 
-
-		if(gisunlink_read_channel_vol(ADURMS,comEnergy,3) != SUCCESS) { //µçÑ¹
-			if(comEnergy->volfailed_time == 0) {
-				comEnergy->volfailed_time = com->utime;
-			} else {
-				if(com->utime > comEnergy->volfailed_time && (com->utime - comEnergy->volfailed_time) >= 5) {						
-					comEnergy->volfailed_time = 0;								
-					com->breakdown_time = 0;
-					com->breakdown |= VOLTAGE_OVERFLOW;													//µçÑ¹²»ÔÚ·¶Î§
-					//gisunlink_close_check_channel(com->id);														
-					return ERROR;	
-				}
-			}
-		} else {
-			comEnergy->volfailed_time = 0;	
-			com->breakdown &= ~(VOLTAGE_OVERFLOW);				
-		}
-
-		if(gisunlink_read_channel_curt(c_reg,comEnergy,3) != SUCCESS) { //¶ÁÈ¡µçÁ÷
-			if(comEnergy->curtfailed_time == 0) {
-				comEnergy->curtfailed_time = com->utime;
-			} else {
-				if(com->utime > comEnergy->curtfailed_time && (com->utime - comEnergy->curtfailed_time) >= 5) {			
-					comEnergy->curtfailed_time = 0;					
-					com->breakdown_time = 0;
-					com->breakdown |= CURREN_OVERFLOW_3A;													//µçÁ÷³¬¹ı3A
-					//gisunlink_close_check_channel(com->id);	
-					return ERROR;		
-				}
-			}
-		} else {
-			comEnergy->curtfailed_time = 0;
-			com->breakdown &= ~(CURREN_OVERFLOW_3A);
-			com->cur_current = comEnergy->uncurt.curt*4/66;//MA							
-		}
-
-		if(com->cur_current <= com->max_current ) { 
-			comEnergy->define_curtfailed_time = 0;
-			com->breakdown &= ~(CURREN_OVERFLOW_SETTING);			
-		}	else {				
-			if(comEnergy->define_curtfailed_time == 0) {
-				comEnergy->define_curtfailed_time = com->utime;
-			} else {
-				if(com->utime > comEnergy->define_curtfailed_time && (com->utime - comEnergy->define_curtfailed_time) >= 5) {			
-					comEnergy->define_curtfailed_time = 0;									
-					com->breakdown_time = 0;
-					com->breakdown |= CURREN_OVERFLOW_SETTING;										//³¬¹ıÉèÖÃµÄµçÁ÷
-					//gisunlink_close_check_channel(com->id);	
-					return ERROR;								
-				}
-			}				
-		}		
+//	if(comEnergy->unid.id != 0x00820900 || com->enable == NO_ENABLE) {
+//		if(fnRN8209_Read(0x7f,(uint8_t *)comEnergy->unid.idbuf,3) != SUCCESS) {
+//		if(comEnergy->unid.id == 0x00820900) {
+//			DelayMs(5);
+//		}
+//	}
+	
+	if(gisunlink_read_channel_ergy(e_reg,comEnergy,3) == SUCCESS) {//ç”µèƒ½		
+		if(comEnergy->ergy_offset_enable == 1) {
+			comEnergy->ergy_offset_enable = 0;
+			comEnergy->ergy_offsetP = 0;
+			comEnergy->ergy_offsetN = comEnergy->unergy.ergy;
+		}			
+		com->used = (abs((int)(comEnergy->unergy.ergy - comEnergy->ergy_offsetN)) * 5 / 16) + comEnergy->ergy_offsetP;
 	} 
+
+	if(gisunlink_read_channel_vol(ADURMS,comEnergy,3) != SUCCESS) { //ç”µå‹
+		if(comEnergy->volfailed_time == 0) {
+			comEnergy->volfailed_time = com->utime;
+		} else {
+			if(com->utime > comEnergy->volfailed_time && (com->utime - comEnergy->volfailed_time) >= 5) {						
+				comEnergy->volfailed_time = 0;								
+				com->breakdown_time = 0;
+				com->breakdown |= VOLTAGE_OVERFLOW;													//ç”µå‹ä¸åœ¨èŒƒå›´
+				//gisunlink_close_check_channel(com->id);														
+				return ERROR;	
+			}
+		}
+	} else {
+		comEnergy->volfailed_time = 0;	
+		com->breakdown &= ~(VOLTAGE_OVERFLOW);				
+	}
+
+	if(gisunlink_read_channel_curt(c_reg,comEnergy,3) != SUCCESS) { //è¯»å–ç”µæµ
+		if(comEnergy->curtfailed_time == 0) {
+			comEnergy->curtfailed_time = com->utime;
+		} else {
+			if(com->utime > comEnergy->curtfailed_time && (com->utime - comEnergy->curtfailed_time) >= 5) {			
+				comEnergy->curtfailed_time = 0;					
+				com->breakdown_time = 0;
+				com->breakdown |= CURREN_OVERFLOW_3A;													//ç”µæµè¶…è¿‡3A
+				//gisunlink_close_check_channel(com->id);	
+				return ERROR;		
+			}
+		}
+	} else {
+		comEnergy->curtfailed_time = 0;
+		com->breakdown &= ~(CURREN_OVERFLOW_3A);
+		com->cur_current = comEnergy->uncurt.curt*4/66;//MA							
+	}
+
+	if(com->cur_current <= com->max_current ) { 
+		comEnergy->define_curtfailed_time = 0;
+		com->breakdown &= ~(CURREN_OVERFLOW_SETTING);			
+	} else {				
+		if(comEnergy->define_curtfailed_time == 0) {
+			comEnergy->define_curtfailed_time = com->utime;
+		} else {
+			if(com->utime > comEnergy->define_curtfailed_time && (com->utime - comEnergy->define_curtfailed_time) >= 5) {			
+				comEnergy->define_curtfailed_time = 0;									
+				com->breakdown_time = 0;
+				com->breakdown |= CURREN_OVERFLOW_SETTING;										//è¶…è¿‡è®¾ç½®çš„ç”µæµ
+				//gisunlink_close_check_channel(com->id);	
+				return ERROR;								
+			}
+		}				
+	}
 	return SUCCESS;	
 }
 
-//»ñÈ¡µ±Ç°µÄ¼ÆÁ¿Êı¾İ
+//è·å–å½“å‰çš„è®¡é‡æ•°æ®
 void gisunlink_read_realtime_meter_data(gisunlink *global) {
 	static uint8_t read_comID = 0;
 	LED_Toggle();			
 	
-//	if(global->comList[read_comID].enable && global->comList[read_comID].breakdown == NO_BREAKDOWN) {	
+	if(global->comList[read_comID].breakdown == NO_BREAKDOWN) {	
 		gisunlink_read_energy_data(&global->comList[read_comID],global);
-//	} else {
-//		gisunlink_close_check_channel(read_comID);	
-//	}
+	} else {
+		gisunlink_close_check_channel(read_comID);
+	}
 	
 	read_comID++; 
 	if(read_comID >= MAX_COM_QUANTITY) {

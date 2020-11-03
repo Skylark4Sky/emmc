@@ -406,9 +406,9 @@ static uint8_t gisunlink_read_energy_data(charge_com *com,gisunlink *global) {
 	
 	if((unread.readTemp&0x0000ffff) != 0xbeac) {
 		EMU_Calibration();
-		uint16_t icReset = global->icReset[com->id];
-		icReset++;
-		global->icReset[com->id] = icReset;
+//		uint16_t icReset = global->icReset[com->id];
+//		icReset++;
+//		global->icReset[com->id] = icReset;
 		comEnergy->ergy_offsetP = com->used*16/5;
 		comEnergy->ergy_offsetN = 0;
 
@@ -425,14 +425,8 @@ static uint8_t gisunlink_read_energy_data(charge_com *com,gisunlink *global) {
 		DelayMs(1);
 		return SUCCESS;
 	}
-
-//	if(comEnergy->unid.id != 0x00820900 || com->enable == NO_ENABLE) {
-//		if(fnRN8209_Read(0x7f,(uint8_t *)comEnergy->unid.idbuf,3) != SUCCESS) {
-//		if(comEnergy->unid.id == 0x00820900) {
-//			DelayMs(5);
-//		}
-//	}
 	
+	if (com->enable == IS_ENABLE && comEnergy->unid.id == 0x00820900) {	
 	if(gisunlink_read_channel_ergy(e_reg,comEnergy,3) == SUCCESS) {//电能		
 		if(comEnergy->ergy_offset_enable == 1) {
 			comEnergy->ergy_offset_enable = 0;
@@ -456,6 +450,7 @@ static uint8_t gisunlink_read_energy_data(charge_com *com,gisunlink *global) {
 		}
 	} else {
 		comEnergy->volfailed_time = 0;	
+		global->icReset[com->id] = comEnergy->unvol.vol/100;
 		com->breakdown &= ~(VOLTAGE_OVERFLOW);				
 	}
 
@@ -492,7 +487,13 @@ static uint8_t gisunlink_read_energy_data(charge_com *com,gisunlink *global) {
 				return ERROR;								
 			}
 		}				
+	}		
+	} else if (com->enable == NO_ENABLE){
+		if(gisunlink_read_channel_curt(c_reg,comEnergy,3) == SUCCESS) { //读取电流
+			com->cur_current = comEnergy->uncurt.curt*4/66;//MA			
+		} 	
 	}
+	
 	return SUCCESS;	
 }
 

@@ -440,17 +440,18 @@ static uint8_t gisunlink_read_energy_data(charge_com *com,gisunlink *global) {
 		if(comEnergy->volfailed_time == 0) {
 			comEnergy->volfailed_time = com->utime;
 		} else {
-			if(com->utime > comEnergy->volfailed_time && (com->utime - comEnergy->volfailed_time) >= 5) {						
+			if(com->utime > comEnergy->volfailed_time && (com->utime - comEnergy->volfailed_time) >= 5) {	
+				global->icReset[com->id] = comEnergy->unvol.vol/100;
 				comEnergy->volfailed_time = 0;								
 				com->breakdown_time = 0;
-				com->breakdown |= VOLTAGE_OVERFLOW;													//电压不在范围
+				//com->breakdown |= VOLTAGE_OVERFLOW;													//电压不在范围
 				//gisunlink_close_check_channel(com->id);														
-				return ERROR;	
+				//return ERROR;	
 			}
 		}
 	} else {
 		comEnergy->volfailed_time = 0;	
-		global->icReset[com->id] = comEnergy->unvol.vol/100;
+
 		com->breakdown &= ~(VOLTAGE_OVERFLOW);				
 	}
 
